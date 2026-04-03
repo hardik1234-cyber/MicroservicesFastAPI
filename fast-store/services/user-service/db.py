@@ -1,6 +1,12 @@
 from sqlmodel import create_engine,Session
+import os
 
-engine = create_engine("sqlite:///database.db",connect_args={"check_same_thread":False})
+DATABASE_URL = os.getenv("DATABASE_URL","sqlite:///database.db")
+
+# check_same_thread is only for SQLite, not for PostgreSQL
+connect_args = {"check_same_thread": False} if "sqlite" in DATABASE_URL else {}
+
+engine = create_engine(DATABASE_URL, connect_args=connect_args)
 
 def get_session():
     """
