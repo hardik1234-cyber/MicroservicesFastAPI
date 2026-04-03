@@ -1,6 +1,6 @@
 from sqlmodel import create_engine,Session
 
-engine = create_engine("sqlite://database.db",connect_args={"check_same_thread":False})
+engine = create_engine("sqlite:///database.db",connect_args={"check_same_thread":False})
 
 def get_session():
     """

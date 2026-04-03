@@ -1,8 +1,8 @@
 from fastapi import FastAPI,Depends
 from contextlib import asynccontextmanager
 from db import engine,get_session
-from sqlmodel import SQLModel,Session
-from models import User
+from sqlmodel import SQLModel,Session, select
+from models import User,UserPublic
 
 
 @asynccontextmanager
@@ -29,4 +29,15 @@ app = FastAPI(lifespan=lifespan)
 def health_check():
     return {"status": "ok","service":"user-service"}
 
-    
+@app.post("/users/",response_model=UserPublic)
+def create_user(user: User,db: Session = Depends(get_session)):
+    db.add(user)
+    db.commit()
+    db.refresh(user)
+    return user
+
+
+@app.get("/users/")
+def read_users(db: Session = Depends(get_session)):
+    users = db.exec(select(User)).all()
+    return users
