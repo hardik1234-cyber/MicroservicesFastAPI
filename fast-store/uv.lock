@@ -544,14 +544,20 @@ name = "product-service"
 version = "0.1.0"
 source = { virtual = "services/product-service" }
 dependencies = [
+    { name = "fastapi", extra = ["standard"] },
     { name = "grpcio" },
     { name = "grpcio-tools" },
+    { name = "psycopg", extra = ["binary"] },
+    { name = "sqlmodel" },
 ]
 
 [package.metadata]
 requires-dist = [
+    { name = "fastapi", extras = ["standard"], specifier = ">=0.135.3" },
     { name = "grpcio", specifier = ">=1.80.0" },
     { name = "grpcio-tools", specifier = ">=1.80.0" },
+    { name = "psycopg", extras = ["binary"], specifier = ">=3.3.3" },
+    { name = "sqlmodel", specifier = ">=0.0.37" },
 ]
 
 [[package]]
