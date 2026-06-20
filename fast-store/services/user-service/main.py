@@ -3,9 +3,6 @@ from contextlib import asynccontextmanager
 from db import engine,get_session
 from sqlmodel import SQLModel,Session, select
 from models import User,UserPublic
-import grpc
-import product_pb2
-import product_pb2_grpc
 from fastapi.middleware.cors import CORSMiddleware
 
 @asynccontextmanager
