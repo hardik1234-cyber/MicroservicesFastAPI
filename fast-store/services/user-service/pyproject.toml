@@ -8,6 +8,7 @@ dependencies = [
     "fastapi[standard]>=0.135.3",
     "grpcio>=1.80.0",
     "grpcio-tools>=1.80.0",
+    "passlib[bcypt]>=1.7.4",
     "psycopg[binary]>=3.3.3",
     "sqlmodel>=0.0.37",
 ]
