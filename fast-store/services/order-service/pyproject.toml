@@ -1,0 +1,10 @@
+[project]
+name = "order-service"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "aio-pika>=10.0.1",
+    "fastapi[standard]>=0.139.2",
+]

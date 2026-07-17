@@ -1,4 +1,20 @@
 services:
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      
   traefik:
     image: traefik:v3.6.2
     command:
@@ -18,8 +34,8 @@ services:
     build:
       context: .
       dockerfile: services/user-service/Dockerfile
-    # ports:
-    #   - "8001:8000"
+    ports:
+      - "8001:8000"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.user-service.entrypoints=web"
@@ -30,7 +46,16 @@ services:
       - DATABASE_URL=${DATABASE_URL}
     depends_on:
       - db
-  
+
+  order-service:
+    build:
+      context: .
+      dockerfile: services/order-service/Dockerfile
+    ports:
+      - "8002:8000" # Exposing directly for testing
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
   db:
     image: postgres:16-alpine
     environment:
