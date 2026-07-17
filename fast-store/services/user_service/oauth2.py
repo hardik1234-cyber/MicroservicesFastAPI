@@ -3,9 +3,9 @@ from fastapi import Depends, HTTPException,status
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from sqlmodel import Session, select
-from services.shared.config import settings
-from services.user_service.db import get_session
-from services.user_service.models import User,DataToken
+from config import settings
+from db import get_session
+from models import User,DataToken
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='/login')
 
@@ -16,9 +16,7 @@ def create_access_token(data: dict):
     to_encode = data.copy()
     expire = datetime.now(tz=timezone.utc)+ timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     to_encode.update({"expire": expire.strftime("%Y-%m-%d %H:%M:%S")})
-
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, ALGORITHM)
-
     return encoded_jwt
 
 def verify_token_access(token: str, credentials_exception):

@@ -12,4 +12,5 @@ dependencies = [
     "psycopg[binary]>=3.3.3",
     "sqlmodel>=0.0.37",
     "python-jose[cryptography]>=3.5.0",
+    "bcrypt==4.3.0",
 ]

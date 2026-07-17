@@ -1,11 +1,11 @@
 from fastapi import FastAPI,Depends,HTTPException,status
 from contextlib import asynccontextmanager
 from fastapi.security import OAuth2PasswordRequestForm
-from services.user_service.db import engine,get_session
+from db import engine,get_session
 from sqlmodel import SQLModel,Session, select
-from services.shared.utils import verify_pass,hash_pass
-from services.shared.oauth2 import create_access_token
-from services.user_service.models import User,UserSignUp,Token
+from utils import verify_pass,hash_pass
+from oauth2 import create_access_token
+from models import User,UserSignUp,Token,UserLogin
 from fastapi.middleware.cors import CORSMiddleware
 
 @asynccontextmanager
@@ -51,7 +51,9 @@ def sign_up(user: UserSignUp, db: Session = Depends(get_session)):
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Username already exists"
         )
-    
+    print(user)
+    print(user.password)
+    print(len(user.password))
     new_user = User(username=user.username,password=hash_pass(user.password),email=user.email)
 
     try:
@@ -65,7 +67,7 @@ def sign_up(user: UserSignUp, db: Session = Depends(get_session)):
     return "User Registered"
 
 @app.post('/login',response_model=Token)
-def login(user_creds: OAuth2PasswordRequestForm = Depends(),db: Session = Depends(get_session)):
+def login(user_creds: UserLogin,db: Session = Depends(get_session)):
     
     user = db.exec(select(User).where(User.username == user_creds.username)).one_or_none()
 
