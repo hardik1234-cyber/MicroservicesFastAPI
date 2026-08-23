@@ -5,7 +5,7 @@ import jwt
 from fastapi.security import OAuth2PasswordBearer
 from passlib.context import CryptContext
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/users/token")
 
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES"))  # type: ignore
 SECRET_KEY = os.getenv("SECRET_KEY")

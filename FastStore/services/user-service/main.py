@@ -8,16 +8,30 @@ from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlmodel import SQLModel, Session
 from utils import create_access_token
+from fastapi.middleware.cors import CORSMiddleware
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     SQLModel.metadata.create_all(engine)
     yield
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI(
+    lifespan=lifespan,
+    docs_url="/users/docs",
+    redoc_url="/users/redoc",
+    openapi_url="/users/openapi.json",
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
-@app.post("/register", response_model=UserRead)
+@app.post("/users/register", response_model=UserRead)
 async def register(
     user_in: UserCreate,
     session: Session = Depends(get_session),  # noqa: B008
@@ -34,7 +48,7 @@ async def register(
     return user
 
 
-@app.post("/token", response_model=Token)
+@app.post("/users/token", response_model=Token)
 async def login(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
     session: Annotated[Session, Depends(get_session)],
