@@ -4,7 +4,7 @@ from typing import Annotated
 from schemas import Token, UserCreate, UserRead
 from db import get_session,engine
 from auth import authenticate_user, create_user, get_user_by_email
-from fastapi import APIRouter, BackgroundTasks, Depends, FastAPI, HTTPException, status
+from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlmodel import SQLModel, Session
 from utils import create_access_token
@@ -19,7 +19,6 @@ app = FastAPI(lifespan=lifespan)
 
 @app.post("/register", response_model=UserRead)
 async def register(
-    background_tasks: BackgroundTasks,
     user_in: UserCreate,
     session: Session = Depends(get_session),  # noqa: B008
 ):
