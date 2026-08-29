@@ -46,11 +46,16 @@ services:
     build:
       context: .
       dockerfile: services/order-service/Dockerfile
-    ports:
-      - "8002:8000" # Exposing directly for testing today
+    # ports:
+    #   - "8002:8000" # Exposing directly for testing today
     depends_on:
       rabbitmq:
         condition: service_healthy
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.order-service.rule=PathPrefix(`/orders`)
+      - traefik.http.routers.order-service.entrypoints=web
+      - traefik.http.services.order-service.loadbalancer.server.port=8000
 
   db:
     image: postgres:16-alpine
