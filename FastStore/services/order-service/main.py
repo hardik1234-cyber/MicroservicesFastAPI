@@ -27,7 +27,13 @@ async def lifespan(app: FastAPI):
     # Cleanup on shutdown
     await rabbitmq_connection.close()
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI(
+    lifespan=lifespan,
+    docs_url="/orders/docs",
+    redoc_url="/orders/redoc",
+    openapi_url="/orders/openapi.json",
+)
+
 
 @app.post("/orders/")
 async def place_order(product_id: int, user_id: int):
